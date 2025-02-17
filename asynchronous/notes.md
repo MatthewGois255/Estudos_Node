@@ -137,3 +137,53 @@ santa()
 santa()
     .catch(naughtyboy)
 ~~~
+
+<br>
+To make it even simpler, what if that console.log was not synchronous code? Because in the previous examples, what made console.log not run in fact were the calbacks and the promises. How about if console.log "understood" it must wait for the async operation? Fortunately, we can! And we don't need any then() for this
+
+~~~javascript
+function coco() {
+    return new Promise((resolver) => {
+        setTimeout(()=>{
+            resolver("coconut")
+        }, 2000)
+    })
+}
+
+async function test() {
+  const fruit = await coco()
+  console.log(fruit)
+}
+
+test() // returns "coconut"
+
+// The logic would be the same without a function expression
+
+async function test2() {
+    await coco()
+    console.log("Hello")
+}
+
+test2() // waits 2 seconds and returns "Hello"
+~~~
+
+As for the first example, without the "await" operator, console.log won't wait for the promise and will return "Promise { <pending> }" on the terminal
+
+Here is another example using *fetch()*
+
+~~~javascript
+async function names() {
+    const data = await fetch('https://jsonplaceholder.typicode.com/users')
+    const result = await data.json() // returns a promise, so we need a 'await' here as well
+    for (let number = 0; number < result.length; number++) {
+        console.log(result[number].name)
+    }
+}
+names()
+~~~
+
+In this case, without the awaits the variables aren't defined. The await operator makes the next task wait untill the operation is done
+
+Note worth that the function containing the await must be a async function
+
+Async functions make the code cleaner. Without the many arrow functions of the promises and indentation, the program become more straightforward
